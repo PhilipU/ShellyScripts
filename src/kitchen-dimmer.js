@@ -70,8 +70,20 @@ Shelly.call("Light.GetStatus", {"id": 0}, function (response, error_code, error_
 
   print("Register Event handler");
   Shelly.addStatusHandler(function(e) {
+    
+    if(e.component === "light:0") {
+      if(e.delta.current > 0 && !isOn) {
+        print("Set isOn = true based on event");
+        isOn = true;
+      } else if(e.delta.current == 0 && isOn) {
+        print("Set isOn = false based on event");
+        isOn = false;
+      }
+    }
+    
     if (e.component !== "input:0") {
       //print("Unknown input event -> Ignore");
+      //print(e);
       return; 
     }
     
