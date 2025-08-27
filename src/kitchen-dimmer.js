@@ -1,3 +1,11 @@
+//-----------------------------------
+// Script for Kitchen Sink Light Rail
+//-----------------------------------
+// - Shelly Dimmer Gen3
+// - Input mode: Switch Detatched
+// - Single button press -> Light on/of
+// - Long button press when light is on -> Light dimms to 20%
+
 const tapThresholdMs = 500;
 const dimmBrightness = 20;
 
