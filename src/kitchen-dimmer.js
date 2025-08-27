@@ -5,19 +5,23 @@ var isOn = false;
 var pressTimer = null;
 var turnOnRunning = false;
 
+function setBrightness(brightness) {
+  isOn = (brightness > 0);
+  Shelly.call("Light.Set", {
+          "id": 0, 
+          "on": isOn, 
+          "brightness": brightness
+        });
+}
+
 function handleButton(pressed) {
     if (pressed === true) {
       print("Button was pressed");
             
       if(!isOn) {
         print("Light is off - turn on immediately");
-        isOn = true;
         turnOnRunning = true;
-        Shelly.call("Light.Set", {
-              "id": 0, 
-              "on": true,
-              "brightness": 100
-              });
+        setBrightness(100);
         return;
       }
       
@@ -25,11 +29,7 @@ function handleButton(pressed) {
         pressTimer = null;
         print("Button held down a while - dimm");
 
-        Shelly.call("Light.Set", {
-          "id": 0, 
-          "on": isOn, 
-          "brightness": dimmBrightness
-        });
+        setBrightness(dimmBrightness);
       });
     }
     else if (pressed === false) {
@@ -44,20 +44,11 @@ function handleButton(pressed) {
         pressTimer = null;
 
         if(isOn) {
-          print("Button was pressed shorty while light was on - turn off");
-          isOn = false;   
-          Shelly.call("Light.Set", {
-                "id": 0, 
-                "on": false,
-                "brightness": 0
-                });
+          print("Button was pressed shorty while light was on - turn off");  
+          setBrightness(0);
         } else {
-          print("Button was pressed shorty while light was off - turn on");
-          isOn = true;   
-          Shelly.call("Light.Set", {
-                "id": 0, 
-                "on": true, 
-                });
+          print("Button was pressed shorty while light was off - turn on"); 
+          setBrightness(100);
         }
       }
     }
@@ -67,7 +58,6 @@ print("Script started")
 
 Shelly.call("Light.GetStatus", {"id": 0}, function (response, error_code, error_message, ud) {
 
-  brightness = response.brightness * 0.01;
   isOn = response.output
 
   print("Register Event handler");
