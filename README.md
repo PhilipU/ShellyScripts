@@ -1,2 +1,2 @@
 # ShellyScripts
-Library of my shelly scripts for home automation
+Library of my shelly device scripts for home automation
